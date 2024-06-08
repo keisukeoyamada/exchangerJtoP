@@ -5,18 +5,16 @@ import img2pdf
 import PyPDF2
 import glob
 from pathlib import Path
+import datetime
 
-#ディレクトリを2つに分けている理由は画像を入れるフォルダとpdfを入れるフォルダを分けるため。
 # このスクリプトの場所を基点にする
 script_dir = Path(__file__).parent
 path = script_dir/"jpg"
-if not os.path.exists(script_dir/"output"):
-    os.mkdir(script_dir/"output")
+if not os.path.exists(script_dir/"pdf"):
+    os.mkdir(script_dir/"pdf")
 else:
     pass
-    
-pdf_path = script_dir/"output"
-#pdf_path = script_dir/"jpg2"
+pdf_path = script_dir/"pdf"
 os.chdir(path)
 
 #画像を読み込み、pdfファイルに変換
@@ -34,8 +32,6 @@ for i in os.listdir(path):
     file = open(pdf_name, "wb")
     #file = open(path, "wb")
     file.write(cov_pdf)
-
-    #開いているファイルを閉じる
     img.close()
     file.close()
 
@@ -46,10 +42,9 @@ pdf_files = sorted(os.listdir(pdf_path))
 
 for j in pdf_files:
     merge.append(pdf_path / j)
-#for j in os.listdir(pdf_path):
-#    merge.append(pdf_path / j)
 
-merge.write(pdf_path / "output.pdf")
+now = datetime.datetime.now()
+merge.write(script_dir/"output"/ f"output_{now.strftime('%Y%m%d_%H%M%S')}.pdf")
 merge.close()
 
 #結合素材となったpdfを削除
