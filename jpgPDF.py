@@ -10,7 +10,13 @@ from pathlib import Path
 # このスクリプトの場所を基点にする
 script_dir = Path(__file__).parent
 path = script_dir/"jpg"
-pdf_path = script_dir/"jpg2"
+if not os.path.exists(script_dir/"output"):
+    os.mkdir(script_dir/"output")
+else:
+    pass
+    
+pdf_path = script_dir/"output"
+#pdf_path = script_dir/"jpg2"
 os.chdir(path)
 
 #画像を読み込み、pdfファイルに変換
