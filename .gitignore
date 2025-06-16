@@ -1,4 +1,6 @@
-jpg/
-pdf/
+jpg/*.jpg
+pdf/*.pdf
 venv/
-output/
+output/*.pdf
+.DS_Store
+# Ignore Python cache files
