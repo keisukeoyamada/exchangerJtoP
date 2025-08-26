@@ -20,6 +20,9 @@ os.chdir(path)
 #画像を読み込み、pdfファイルに変換
 for i in os.listdir(path):
     #pdfファイルの保存名を指定
+    # 画像ファイルのみ処理（jpg, jpeg, png など必要に応じて追加）
+    if not i.lower().endswith(('.jpg', '.jpeg', '.png')):
+        continue
     pdf_name = pdf_path / ("PDF_" + str(i[0:9]) + ".pdf")
 
     #Pillowモジュールを使用し画像の読み込み
@@ -41,7 +44,11 @@ merge = PyPDF2.PdfMerger()
 pdf_files = sorted(os.listdir(pdf_path))
 
 for j in pdf_files:
-    merge.append(pdf_path / j)
+    pdf_file_path = pdf_path / j
+    # ファイルサイズが0の場合はスキップ
+    if os.path.getsize(pdf_file_path) == 0:
+        continue
+    merge.append(pdf_file_path)
 
 now = datetime.datetime.now()
 merge.write(script_dir/"output"/ f"output_{now.strftime('%Y%m%d_%H%M%S')}.pdf")
