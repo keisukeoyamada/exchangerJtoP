@@ -4,5 +4,6 @@ pdf/*.pdf
 !pdf/.gitkeep
 venv/
 output/*.pdf
+!output/.gitkeep
 .DS_Store
 # Ignore Python cache files
