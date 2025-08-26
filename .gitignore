@@ -1,5 +1,7 @@
 jpg/*.jpg
+!jpg/.gitkeep
 pdf/*.pdf
+!pdf/.gitkeep
 venv/
 output/*.pdf
 .DS_Store
