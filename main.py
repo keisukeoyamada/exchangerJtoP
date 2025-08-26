@@ -13,22 +13,24 @@ script_dir = Path(__file__).parent
 jpg_root = script_dir / "jpg"
 pdf_root = script_dir / "pdf"
 output_root = script_dir / "output"
+processed_root = jpg_root / "processed"
 
 # 必要なフォルダがなければ作成
 os.makedirs(pdf_root, exist_ok=True)
 os.makedirs(output_root, exist_ok=True)
+os.makedirs(processed_root, exist_ok=True)
 
 #画像を読み込み、pdfファイルに変換
 for subdir in jpg_root.iterdir():
-    if not subdir.is_dir():
+    # processedフォルダは処理対象外
+    if not subdir.is_dir() or subdir.name == "processed":
         continue
     # サブフォルダごとにpdf保存先を作成
     pdf_path = pdf_root / subdir.name
     os.makedirs(pdf_path, exist_ok=True)
 
     for i in os.listdir(subdir):
-        #pdfファイルの保存名を指定
-        # 画像ファイルのみ処理（jpg, jpeg, png など必要に応じて追加）
+        # 画像ファイルのみ処理
         if not i.lower().endswith(('.jpg', '.jpeg', '.png')):
             continue
         img_path = subdir / i
@@ -36,17 +38,14 @@ for subdir in jpg_root.iterdir():
         img = Image.open(img_path)
         cov_pdf = img2pdf.convert(str(img_path))
         with open(pdf_name, "wb") as file:
-                file.write(cov_pdf)
+            file.write(cov_pdf)
         img.close()
 
     #複数のpdfファイルを結合する
     merge = PyPDF2.PdfMerger()
-    # ファイル名のリストを取得し、昇順にソート
     pdf_files = sorted(os.listdir(pdf_path))
-
     for j in pdf_files:
         pdf_file_path = pdf_path / j
-        # ファイルサイズが0の場合はスキップ
         if os.path.getsize(pdf_file_path) == 0:
             continue
         merge.append(pdf_file_path)
@@ -59,5 +58,8 @@ for subdir in jpg_root.iterdir():
     #結合素材となったpdfを削除
     for file in pdf_path.glob('PDF_*.pdf'):
         os.remove(file)
+
+    # 処理済みサブフォルダを processed フォルダに移動
+    os.rename(subdir, processed_root / subdir.name)
 
 print("変換終了")
