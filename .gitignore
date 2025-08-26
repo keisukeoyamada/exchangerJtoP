@@ -1,6 +1,6 @@
-jpg/*.jpg
+jpg/
 !jpg/.gitkeep
-pdf/*.pdf
+pdf/
 !pdf/.gitkeep
 venv/
 output/*.pdf
