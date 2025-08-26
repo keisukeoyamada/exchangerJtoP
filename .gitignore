@@ -1,5 +1,7 @@
 jpg/
 !jpg/.gitkeep
+jpg/processed/
+!jpg/processed/.gitkeep
 pdf/
 !pdf/.gitkeep
 venv/
