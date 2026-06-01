@@ -1,11 +1,12 @@
-#https://kimamani89.com/2019/05/06/post-475/
+# https://kimamani89.com/2019/05/06/post-475/
+import datetime
+import glob
 import os
-from PIL import Image
+from pathlib import Path
+
 import img2pdf
 import PyPDF2
-import glob
-from pathlib import Path
-import datetime
+from PIL import Image
 
 # このスクリプトの場所を基点にする
 script_dir = Path(__file__).parent
@@ -20,7 +21,7 @@ os.makedirs(pdf_root, exist_ok=True)
 os.makedirs(output_root, exist_ok=True)
 os.makedirs(processed_root, exist_ok=True)
 
-#画像を読み込み、pdfファイルに変換
+# 画像を読み込み、pdfファイルに変換
 for subdir in jpg_root.iterdir():
     # processedフォルダは処理対象外
     if not subdir.is_dir() or subdir.name == "processed":
@@ -31,7 +32,7 @@ for subdir in jpg_root.iterdir():
 
     for i in os.listdir(subdir):
         # 画像ファイルのみ処理
-        if not i.lower().endswith(('.jpg', '.jpeg', '.png')):
+        if not i.lower().endswith((".jpg", ".jpeg", ".png")):
             continue
         img_path = subdir / i
         pdf_name = pdf_path / ("PDF_" + i[0:9] + ".pdf")
@@ -41,7 +42,7 @@ for subdir in jpg_root.iterdir():
             file.write(cov_pdf)
         img.close()
 
-    #複数のpdfファイルを結合する
+    # 複数のpdfファイルを結合する
     merge = PyPDF2.PdfMerger()
     pdf_files = sorted(os.listdir(pdf_path))
     for j in pdf_files:
@@ -51,12 +52,13 @@ for subdir in jpg_root.iterdir():
         merge.append(pdf_file_path)
 
     now = datetime.datetime.now()
-    output_pdf = output_root / f"{subdir.name}_output_{now.strftime('%Y%m%d_%H%M%S')}.pdf"
+    # output_pdf = output_root / f"{subdir.name}_output_{now.strftime('%Y%m%d_%H%M%S')}.pdf"
+    output_pdf = output_root / f"{subdir.name}.pdf"
     merge.write(output_pdf)
     merge.close()
 
-    #結合素材となったpdfを削除
-    for file in pdf_path.glob('PDF_*.pdf'):
+    # 結合素材となったpdfを削除
+    for file in pdf_path.glob("PDF_*.pdf"):
         os.remove(file)
 
     # 処理済みサブフォルダを processed フォルダに移動
