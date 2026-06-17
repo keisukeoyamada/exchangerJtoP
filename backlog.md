@@ -1,0 +1,2 @@
+- インプットfileを再帰的に読めない。file/jpgじゃないとダメな仕様だがこれを良しなに変えたい。
+- requirements.txt
