@@ -6,6 +6,7 @@ import PyPDF2
 import glob
 from pathlib import Path
 import datetime
+import shutil
 
 # このスクリプトの場所を基点にする
 script_dir = Path(__file__).parent
@@ -60,6 +61,8 @@ for subdir in jpg_root.iterdir():
         os.remove(file)
 
     # 処理済みサブフォルダを processed フォルダに移動
-    os.rename(subdir, processed_root / subdir.name)
+    # os.rename(subdir, processed_root / subdir.name)
+    shutil.move(str(subdir), str(processed_root / subdir.name))
+
 
 print("変換終了")
